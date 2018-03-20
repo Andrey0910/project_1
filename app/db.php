@@ -1,6 +1,7 @@
 <?php
 // подключаем настройки базы данных
-$config = include (__DIR__ . DIRECTORY_SEPARATOR . 'config.php');
+//$config = include (__DIR__ . DIRECTORY_SEPARATOR . 'config.php');
+$config = include ('../app/config.php');
 
 //
 $pdoConfig = (object)$config["db"];
@@ -18,24 +19,24 @@ try {
 }
 
 //Our SQL statement, which will select a list of tables from the current MySQL database.
-$sql = "SHOW TABLE";
+//$sql = "SHOW TABLE";
 
 //Prepare our SQL statement,
-$statement = $pdo->prepare($sql);
+//$statement = $pdo->prepare($sql);
 
 //Execute the statement.
-$statement->execute();
+//$statement->execute();
 
-if ($statement->errorCode() !== "00000") {
-    echo implode(" ", $statement->errorInfo()) . "\n";
-    return null;
-}
+//if ($statement->errorCode() !== "00000") {
+    //echo implode(" ", $statement->errorInfo()) . "\n";
+    //return null;
+//}
 
 //Fetch the rows from our statement.
-$tables = $statement->fetchAll(PDO::FETCH_NUM);
+//$tables = $statement->fetchAll(PDO::FETCH_NUM);
 
 //Loop through our table names.
-foreach($tables as $table){
+//foreach($tables as $table){
     //Print the table name out onto the page.
-    echo $table[0], "\n";
-}
+    //echo $table[0], "\n";
+//}

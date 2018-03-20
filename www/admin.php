@@ -1,6 +1,7 @@
 <?php
-$dsn = "mysql:host=localhost;dbname=loftschool;charset=utf8";
-$pdo = new PDO($dsn, "root", "");
+//Пдключение БД
+require_once ('../app/db.php');
+//
 $stmt = $pdo->query('SELECT u.email, u.name, u.phone, o.address, o.comment FROM users u, orders o WHERE u.id = o.userId ORDER BY u.id');
 $data = $stmt->fetchAll(pdo::FETCH_OBJ);
 echo "<table>";

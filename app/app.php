@@ -1,7 +1,6 @@
 <?php
-//Подкльлчение к БД
-$dsn = "mysql:host=localhost;dbname=loftschool;charset=utf8";
-$pdo = new PDO($dsn, "root", "");
+//Пдключение БД
+require_once ('db.php');
 //Получаем даннык пользовптеля с формы
 $id = null;
 $email = $_POST['email'];
