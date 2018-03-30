@@ -1,4 +1,5 @@
 <?php
+require '../vendor/autoload.php';
 // начинаем работать с сессией
 session_start();
 

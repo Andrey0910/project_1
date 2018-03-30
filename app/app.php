@@ -1,6 +1,9 @@
 <?php
+
+use PHPMailer\PHPMailer\PHPMailer;
+
 //Пдключение БД
-require_once ('db.php');
+require_once('db.php');
 //Получаем даннык пользовптеля с формы
 $id = null;
 $email = $_POST['email'];
@@ -39,23 +42,49 @@ $stmt = $pdo->query('SELECT * FROM orders ORDER BY id DESC LIMIT 1');
 $data = $stmt->fetchAll(pdo::FETCH_OBJ);
 $order = [
     "Номер заказа" => $data[0]->id
-    ,"Ваш заказ будет доставлен по адресу" => $address
-    ,"Заказ" => "DarkBeefBurger за 500 рублей, 1 шт."
-    ,"ps" => "Спасибо - это ваш первый заказ!"
-    ,"time" => date("Y-m-d H:i:s")
+    , "Ваш заказ будет доставлен по адресу" => $address
+    , "Заказ" => "DarkBeefBurger за 500 рублей, 1 шт."
+    , "ps" => "Спасибо - это ваш первый заказ!"
+    , "time" => date("Y-m-d H:i:s")
 ];
 $json = json_encode($order);
 $dir = "out";
-$file = (string)time().".txt";
+$file = (string)time() . ".txt";
 if (!file_exists($dir)) {
     mkdir($dir, 0700, true);
 }
-$fullPath = "./".$dir."/".$file;
+$fullPath = "./" . $dir . "/" . $file;
 file_put_contents($fullPath, $json);
+sentMail();
 function userExist($pdo, $email)
 {
     $prepare = $pdo->prepare('SELECT * FROM users WHERE email = :email');
     $prepare->execute(['email' => $email]);
     $data = $prepare->fetchAll(pdo::FETCH_OBJ);
     return $data;
+}
+
+function sentMail()
+{
+    $maile = new PHPMailer();
+    $maile->isSMTP();
+    $maile->SMTPAuth = true;
+    $maile->Host = "smtp.yandex.ru";// возможно не верный host
+    $maile->Username = "asdfrfk@yandex.ru";
+    $maile->Password = "lkjejml12348";
+    $maile->SMTPSecure = "ssl";
+    $maile->Port = 465;
+    $maile->setFrom("asdfrfk@yandex.ru", "ааа");
+    $maile->addAddress("petrovaa71@mail.ru", "Андрей");
+    $maile->CharSet = "UTF-8";
+    $maile->isHTML(true);
+    $maile->Subject = "Письмо с сайта " . date("d.m.Y H:i:s");
+    $maile->Body = "This is the HTML message body <b>in bold</b>>";
+    $maile->AltBody = "Это HTML сообщение.";
+    if (!$maile->send()) {
+        echo "Сообщение не может быть отправлено.";
+        echo "Mailer Errer:" . $maile->ErrorInfo;
+    } else {
+        echo "Сообщение отправлено.";
+    }
 }
