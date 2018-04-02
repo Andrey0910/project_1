@@ -1,7 +1,9 @@
 <?php
 
 use PHPMailer\PHPMailer\PHPMailer;
+use ReCaptcha\ReCaptcha;
 
+submit();
 //Пдключение БД
 require_once('db.php');
 //Получаем даннык пользовптеля с формы
@@ -66,25 +68,44 @@ function userExist($pdo, $email)
 
 function sentMail()
 {
-    $maile = new PHPMailer();
-    $maile->isSMTP();
-    $maile->SMTPAuth = true;
-    $maile->Host = "smtp.yandex.ru";// возможно не верный host
-    $maile->Username = "asdfrfk@yandex.ru";
-    $maile->Password = "lkjejml12348";
-    $maile->SMTPSecure = "ssl";
-    $maile->Port = 465;
-    $maile->setFrom("asdfrfk@yandex.ru", "ааа");
-    $maile->addAddress("petrovaa71@mail.ru", "Андрей");
-    $maile->CharSet = "UTF-8";
-    $maile->isHTML(true);
-    $maile->Subject = "Письмо с сайта " . date("d.m.Y H:i:s");
-    $maile->Body = "This is the HTML message body <b>in bold</b>>";
-    $maile->AltBody = "Это HTML сообщение.";
-    if (!$maile->send()) {
-        echo "Сообщение не может быть отправлено.";
-        echo "Mailer Errer:" . $maile->ErrorInfo;
-    } else {
-        echo "Сообщение отправлено.";
+    try {
+        $maile = new PHPMailer();
+        $maile->isSMTP();
+        $maile->SMTPAuth = true;
+        $maile->Host = "smtp.yandex.ru";// возможно не верный host
+        $maile->Username = "asdfrfk@yandex.ru";
+        $maile->Password = "lkjejml12348";
+        $maile->SMTPSecure = "ssl";
+        $maile->Port = 465;
+        $maile->setFrom("asdfrfk@yandex.ru", "ааа");
+        $maile->addAddress("petrovaa71@mail.ru", "Андрей");
+        $maile->addAttachment("../composer.json");
+        $maile->addReplyTo("asdfrfk@yandex.ru", "ааа");
+        $maile->CharSet = "UTF-8";
+        $maile->isHTML(true);
+        $maile->Subject = "Письмо с сайта " . date("d.m.Y H:i:s");
+        $maile->Body = "This is the HTML message body <b>in bold</b>";
+        $maile->AltBody = "Это HTML сообщение.";
+        if (!$maile->send()) {
+            echo "Сообщение не может быть отправлено.";
+            echo "Mailer Errer:" . $maile->ErrorInfo;
+        } else {
+            echo "Сообщение отправлено.";
+        }
+    } catch (Exception $e) {
+        $e->getMessage();
+    }
+}
+
+function submit()
+{
+    $remoteIp = $_SERVER['REMOTE_ADDR'];
+    $gRecaptchaResponse = $_REQUEST['g-recaptcha-response'];
+    $recaptcha = new ReCaptcha("6Ld0MVAUAAAAAE-JwV29wOdxK-yQ78EudNkjFXrp");
+    $resp = $recaptcha->verify($gRecaptchaResponse, $remoteIp);
+    if (!$resp->isSuccess()) {
+        echo "Поражен вашей неудачей, сударь", "<br>";
+        echo "<a href='/'>Назад</a>";
+        die();
     }
 }
