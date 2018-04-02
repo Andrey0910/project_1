@@ -26,6 +26,18 @@ if ($_SERVER['REQUEST_URI'] == "/admin") {
     return 0;
 }
 
+// работа с фото
+if ($_SERVER['REQUEST_URI'] == "/photo") {
+    require_once($appDir . DIRECTORY_SEPARATOR . '../www/photo.php');
+    return 0;
+}
+
+// уменьшенная фото
+if ($_SERVER['REQUEST_URI'] == "/photo_resize") {
+    require_once($appDir . DIRECTORY_SEPARATOR . '../www/photo_resize.php');
+    return 0;
+}
+
 // просмотр заказов (административная панель)
 if ($_SERVER['REQUEST_URI'] == "/admin/orders") {
     // тут код вывода
