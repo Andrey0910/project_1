@@ -1,0 +1,18 @@
+<table border="1">
+    <tr>
+        <td> <b>E-mail</b> </td>
+        <td> <b>Имя</b> </td>
+        <td> <b>Телефон</b> </td>
+        <td> <b>Адрес</b> </td>
+        <td> <b>Комментарий</b> </td>
+    </tr>
+    {% for user in users %}
+        <tr>
+            <td> {{ user.email }} </td>
+            <td> {{ user.name }} </td>
+            <td> {{ user.phone }} </td>
+            <td> {{ user.address }} </td>
+            <td> {{ user.comment }} </td>
+        </tr>
+    {% endfor %}
+</table>
